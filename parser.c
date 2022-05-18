@@ -10,6 +10,7 @@
 int Counter(char *C, char *lim)
 {
 	int i = 0, num = 0;
+
 	if (lim != NULL)
 	{
 		while (C && C[i] != '\0')
