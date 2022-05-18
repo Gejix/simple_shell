@@ -61,7 +61,7 @@ char **parsing(char *line)
 		/*fill the pointer with the content of token*/
 		for (i = 0; i < length; i++)
 			p[j][i] = token[i];
-		
+
 		length = 0;
 		j++;
 		/*get the next element*/
