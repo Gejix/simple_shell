@@ -1,6 +1,6 @@
 #include "sshell.h"
 /**
- * free_grid - free a matrix
+ * gridfree - free a matrix
  * @grid: it is the matrix
  * @height: height of the matrix
  * Return: nothing

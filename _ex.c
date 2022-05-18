@@ -1,6 +1,6 @@
 #include "sshell.h"
 /**
- * _exit - finds if line input is exit therefore process termination
+ * _ex - finds if line input is exit therefore process termination
  * @p: input of user
  */
 void _ex(char *p)
@@ -16,7 +16,7 @@ void _ex(char *p)
 	{
 		while (i < 4)
 		{
-			if(p[i] == str[i])
+			if (p[i] == str[i])
 				cont++;
 			i++;
 		}
