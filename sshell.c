@@ -1,5 +1,11 @@
 #include "sshell.h"
 
+/**
+ * main - entry point
+ *
+ * Return: Always 0
+ */
+
 int main(void)
 {
 	char *line = NULL;
@@ -15,7 +21,7 @@ int main(void)
 		args = parsing(line);
 		if (args == NULL)
 			return (0);
-			
+
 		for (i = 0; args[i] != NULL; i++)
 			;
 		_fork(args, line, i);
