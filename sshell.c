@@ -1,5 +1,8 @@
 #include "sshell.h"
-
+/**
+ * main - shell main function
+ * Return: nothing
+ */
 int main(void)
 {
 	char *line = NULL;
@@ -11,11 +14,10 @@ int main(void)
 		line = _getline();
 		if (line == NULL)
 			return (0);
-
 		args = parsing(line);
 		if (args == NULL)
 			return (0);
-			
+
 		for (i = 0; args[i] != NULL; i++)
 			;
 		_fork(args, line, i);
