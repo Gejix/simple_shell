@@ -45,6 +45,7 @@ int main(int argc, char *argv[])
 	{
 		line = _getline(ploop);
 		args = parsing(line);
+
 		if (args)
 		{
 			for (i = 0; args[i] != NULL; i++)
