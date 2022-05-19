@@ -29,6 +29,8 @@ int revision(char **p, int loop, char *line, int i, char *argv[])
 }
 /**
  *main - shell skeleton
+ *@argc: number of arguments
+ *@argv: arguments in input
  * Return: 0 on Success
  */
 int main(int argc, char *argv[])

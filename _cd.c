@@ -35,6 +35,9 @@ int _cd(char **p, int loop, char *v[])
 	}
 	return (valor);
 }
+/**
+ * _clean - loop through character
+ * */
 void _clean(char *c)
 {
 	int i;
@@ -42,6 +45,9 @@ void _clean(char *c)
 	for (i = 0; i < 2048; i++)
 		c[i] = 0;
 }
+/**
+ * _fullcd - give back full output
+ * */
 void _fullcd(char *f, char *aux)
 {
 	int w;
@@ -74,33 +80,28 @@ void _iscd(char **a, int loop, char *v[])
 	{
 		_clean(buf);
 		getcwd(buf, 2048);
-		/*old = buf*/
+
 		valor = chdir((const char *)_gethome());
 		if (valor == -1)
 			_put_err(a, loop, 1, v);
-		/*pwd = _get(home)*/
 	}
 	else if (a[1][0] == '-' && a[1][1] == '\0')
 	{
 		_clean(aux);
 		getcwd(aux, 2048);
-		/*old = aux*/
 		write(STDOUT_FILENO, buf, 2048);
 		write(STDOUT_FILENO, "\n", 1);
 		valor = chdir((const char *)buf);
 		if (valor == -1)
 			_put_err(a, loop, 1, v);
-		/*pwd = buf */
 		_fullcd(buf, aux);
 	}
 	else
 	{
 		_clean(buf);
 		getcwd(buf, 2048);
-		/*old = buf*/
 		valor = chdir((const char *)a[1]);
 		if (valor == -1)
 			_put_err(a, loop, 1, v);
-		/*pwd = buf*/
 	}
 }
