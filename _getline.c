@@ -1,36 +1,48 @@
 #include "sshell.h"
 /**
  * _getline - function to read what the user writes
+ * @a: pointer to loop counter
  * Return: line in sucess otherwise NULL.
  */
-char *_getline(void)
+char *_getline(int *a)
 {
-	char *line = NULL;
+	char letter[1] = {0}, *line = NULL;
 	size_t bufsize = 0;
-	ssize_t num = 0, pos = 0;
+	int num = 1;
 
-	write(STDOUT_FILENO, "#cisfun$ ", 9);
-	num = getline(&line, &bufsize, stdin);
-
-	/*infinity loop while is different of EOF or error*/
-	while (num != -1)
+	while (num != 0)
 	{
-		_ex(line);
-		pos = 0;
-		if (!(line[0] == '\n'))
+		bufsize = 0;
+		write(STDIN_FILENO, "#cisfun$ ", 9);
+		*a = *a + 1;
+		signal(SIGINT, _signal);
+
+		while ((num = read(STDIN_FILENO, letter, 1)) > 0)
 		{
-			while (line[pos] != '\0')
+			if (bufsize == 0)
+				line = _calloc(bufsize + 1, sizeof(char));
+			else
+				line = _realloc(line, bufsize, bufsize + 1);
+			if (!line)
 			{
-				if (line[pos] == '\n')
-					return (line);
-				pos++;
+				num = 0;
+				break;
 			}
+			line[bufsize] = letter[0];
+			if (line[bufsize] == '\n')
+				break;
+			bufsize++;
 		}
-		write(STDOUT_FILENO, "#cisfun$ ", 9);
-		num = getline(&line, &bufsize, stdin);
+		if (!line && num == 0)
+			break;
+		if (line[0] != '\n')
+			return (line);
 	}
-	/* to get an end of line when the shell finish*/
-	write(STDOUT_FILENO, "\n", 1);
+	if (num == 0)
+	{
+		write(STDIN_FILENO, "\n", 1);
+		exit(0);
+	}
 	free(line);
 	return (NULL);
 }
