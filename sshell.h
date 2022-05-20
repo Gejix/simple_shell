@@ -21,7 +21,7 @@ void _updatepwd(char *buf, char **myenv);
 /* shell functions*/
 void _argv_plus(char *argv[], char *envp[]);
 void _argv_nil(char *argv[], char *envp[]);
-int revision(char **p, int loop, char *li, int i,char *av[], char **m, int *e);
+int revision(char **p, int loop, char *li, int i, char *av[], char **m, int *e);
 void functions(char *line, int loop, char *argv[], char **m, int *e, char *f);
 char *_getline(int *a, char **m, int e);
 char **parsing(char *line);
@@ -36,7 +36,7 @@ int semicolon(char *line, int loop, char **argv);
 
 /* getline functions*/
 void gridfree(char **grid, int height);
-void _fork(char **p, char *l, int a, int L, char **v, int e,char **m, char *f);
+void _fork(char **p, char *l, int a, int L, char **v, int e, char **m, char *f);
 void *_calloc(unsigned int nume, unsigned int size);
 char *_strtok(char *s, char *d);
 char *_strtok2(char *s, char *d);
