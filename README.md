@@ -40,6 +40,7 @@ Description of the files used:
 Some of the examples of this shell working process:
 
 cd:
+
 	#cisfun$ pwd
 	/home/vagrant/simple_shell
 	#cisfun$ cd
@@ -48,16 +49,19 @@ cd:
 	#cisfun$
 
 cd error:
+
 	#cisfun$ cd hola
 	./hsh: 1: cd: can't cd to hola
 	#cisfun$
 
 exit:
+
 	#cisfun$ exit 123
 	vagrant@vagrant-ubuntu-trusty-64:~/simple_shell$ echo $?
 	123
 
 exit error:
+
 	#cisfun$ exit hola
 	./hsh: 2: exit: Illegal number: hola
 	#cisfun$

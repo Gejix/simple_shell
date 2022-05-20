@@ -3,14 +3,17 @@
 /**
  * _fork - program that creates process and execute
  * @p: array of pointer (args)
- * @line: input typed by the user
+ * @l: input typed by the user
  * @a: count of pointers
- * @loop: count of loops
+ * @L: count of loops
  * @v: arguments in input
+ * @e: env length
+ * @m: copy of environmental variable
+ * @f: complete input
  * Return: Nothing.
  */
 
-void _fork(char **p, char *line, int a, int loop, char *v[])
+void _fork(char **p, char *l, int a, int L, char **v, int e, char **m, char *f)
 {
 	pid_t child_pid;
 	int status;
@@ -23,12 +26,14 @@ void _fork(char **p, char *line, int a, int loop, char *v[])
 	}
 	if (child_pid == 0)
 	{
-		if (execve(p[0], p, environ) == -1)
+		if (execve(p[0], p, m) == -1)
 		{
-			_put_err(p, loop, 3, v);
+			_put_err(p, L, 3, v);
 		}
-		free(line);
+		free(f);
+		free(l);
 		gridfree(p, a);
+		gridfree(m, e);
 		/*printf("After execve\n");*/
 		exit(127);
 	}

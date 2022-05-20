@@ -57,6 +57,7 @@ void _clean(char *c)
  * @aux: pointer to aux
  * Return: -1 if not success 0 if exist cd in args[0]
  */
+
 void _fullcd(char *f, char *aux)
 {
 	int w;
@@ -91,14 +92,17 @@ void _iscd(char **a, int loop, char *v[], char **myenv)
 	{
 		_clean(buf);
 		getcwd(buf, 2048);
+
 		_updateoldpwd(buf, myenv);
 		valor = chdir((const char *)_gethome(myenv));
 		_updatepwd(_gethome(myenv), myenv);
+
 	}
 	else if (a[1][0] == '-' && a[1][1] == '\0')
 	{
 		_clean(aux);
 		getcwd(aux, 2048);
+
 		_updateoldpwd(aux, myenv);
 		write(STDOUT_FILENO, buf, 2048);
 		write(STDOUT_FILENO, "\n", 1);
