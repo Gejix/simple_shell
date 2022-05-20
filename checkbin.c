@@ -1,21 +1,23 @@
 #include "sshell.h"
+
 /**
   * _getpwd - get the PWD env variable
+  * @m: copoy of environment variables
   * Return: the string inside PWD env variable
   */
-char *_getpwd(void)
+char *_getpwd(char **m)
 {
 	int i, j, k = 0, cont = 0;
 	char str[] = "PWD=";
 	char *pwd;
 
-	for (i = 0; environ[i] != NULL; i++)
+	for (i = 0; m[i] != NULL; i++)
 	{
-		for (j = 0; environ[i][j] != '\0'; j++)
+		for (j = 0; m[i][j] != '\0'; j++)
 		{
 			if (cont == 4)
 				break;
-			if (environ[i][j] == str[j])
+			if (m[i][j] == str[j])
 				cont++;
 			else
 				break;
@@ -23,18 +25,22 @@ char *_getpwd(void)
 		if (cont == 4)
 			break;
 	}
-	while (environ[i][k] != '\0')
-		k++;
-	pwd = _calloc(k + 1, sizeof(char));
-	if (pwd == NULL)
-		return (NULL);
-	k = 4;
-	while (environ[i][k] != '\0')
+	if (cont == 4)
 	{
-		pwd[k - 4] = environ[i][k];
-		k++;
+		while (m[i][k] != '\0')
+			k++;
+		pwd = _calloc(k + 1, sizeof(char));
+		if (pwd == NULL)
+			return (NULL);
+		k = 4;
+		while (m[i][k] != '\0')
+		{
+			pwd[k - 4] = m[i][k];
+			k++;
+		}
+		return (pwd);
 	}
-	return (pwd);
+	return (NULL);
 }
 /**
  * _verifypath - check if the path has a : at the begining
@@ -89,21 +95,22 @@ char *_verifypath(char *path, char *pwd)
 }
 /**
  *_getpath - get the string in PATH env
+ * @m: environment variables
  * Return: string inside PATH env variable
  */
-char *_getpath(void)
+char *_getpath(char **m)
 {
 	int i, j, k = 0, w = 0, cont = 0;
 	char str[] = "PATH=";
 	char *path;
 
-	for (i = 0; environ[i] != NULL; i++)
+	for (i = 0; m[i] != NULL; i++)
 	{
-		for (j = 0; environ[i][j] != '\0'; j++)
+		for (j = 0; m[i][j] != '\0'; j++)
 		{
 			if (cont == 5)
 				break;
-			if (environ[i][j] == str[j])
+			if (m[i][j] == str[j])
 				cont++;
 			else
 				break;
@@ -112,31 +119,36 @@ char *_getpath(void)
 			break;
 	}
 	k = cont;
-	while (environ[i][k] != '\0')
+	if (cont == 5)
 	{
-		w++;
-		k++;
+		while (m[i][k] != '\0')
+		{
+			w++;
+			k++;
+		}
+		if (w == 0)
+			return (NULL);
+		path = _calloc(w + 1, sizeof(char));
+		if (path == NULL)
+			return (NULL);
+		k = 5;
+		while (m[i][k] != '\0')
+		{
+			path[k - 5] = m[i][k];
+			k++;
+		}
+		return (path);
 	}
-	if (w == 0)
-		return (NULL);
-	path = _calloc(w + 1, sizeof(char));
-	if (path == NULL)
-		return (NULL);
-	k = 5;
-	while (environ[i][k] != '\0')
-	{
-		path[k - 5] = environ[i][k];
-		k++;
-	}
-	return (path);
+	return (NULL);
 }
 /**
  * checkbin - checks if arg[0] has /bin/
  * @b: input of user, array of pointers
+ * @m: copy of environment variables
  * Return: 0.
  */
 
-char **checkbin(char **b)
+char **checkbin(char **b, char **m)
 {
 	unsigned int i = 0, j = 0, k = 0;
 	struct stat veri;
@@ -146,10 +158,10 @@ char **checkbin(char **b)
 	i = _strlen(b[0]);
 	if (b == NULL || i == 0)
 		return (NULL);
-	path = _getpath();
+	path = _getpath(m);
 	if (path == NULL)
 		return (b);
-	pwd = _getpwd();
+	pwd = _getpwd(m);
 	newpath = _verifypath(path, pwd);
 	tokens = _strtok(newpath, ":");
 	if (!tokens)
