@@ -1,35 +1,6 @@
 #include "sshell.h"
 
 /**
- * print_number - prints all natural numbers
- * @n: parameter to print
- * Return: Always 0
- */
-void print_number(int n)
-{
-	unsigned int j, cont = 1;
-	char a;
-	unsigned int var1, num, var2, var3 = 1;
-
-	var2 = n;
-	num = var2;
-	while (num > 9)
-	{
-		num = num / 10;
-		cont++;
-		var3 = var3 * 10;
-	}
-	for (j = 1; j <= cont; j++)
-	{
-		var1 = var2 / var3;
-		var2 = var2 % var3;
-		var3 = var3 / 10;
-		a = '0' + var1;
-		write(STDERR_FILENO, &a, 1);
-	}
-}
-
-/**
  * _put_err - writes the error
  * @p: input pointer
  * @loop: counter of loops
@@ -49,14 +20,15 @@ void _put_err(char **p, int loop, int sig, char *v[])
 	if (pr == 2 || (pr == 3 && sig == 3))
 	{
 		write(STDERR_FILENO, v[0], _strlen(v[0]));
-		write(STDERR_FILENO, ":", 1);
-		write(STDERR_FILENO, " ", 1);
+		write(STDERR_FILENO, ": ", 2);
 		print_number(loop);
-		write(STDERR_FILENO, ":", 1);
-		write(STDERR_FILENO, " ", 1);
+		write(STDERR_FILENO, ": ", 2);
 	}
 	if (pr == 2)
+	{
 		_builtinerr(p);
+		_builtinerr2(p);
+	}
 	else if (pr == 3 && sig == 3)
 	{
 		_errorgarbage(p);
@@ -96,5 +68,26 @@ void _builtinerr(char **p)
 				cont2++;
 		if (cont2 == 4)
 			_errorhelp(p);
+	}
+}
+/**
+ * _builtinerr2 - writes the error
+ * @p: input pointer
+ * Return: nothing.
+ */
+void _builtinerr2(char **p)
+{
+	char str1[9] = "unsetenv";
+	int i = 0, j = 0, cont = 0;
+
+	while (p[0][j] != '\0')
+		j++;
+	if (j == 8)
+	{
+		for (; i < 8; i++)
+			if (p[0][i] == str1[i])
+				cont++;
+		if (cont == 8)
+			_errorenv(p);
 	}
 }

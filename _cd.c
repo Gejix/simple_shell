@@ -1,12 +1,14 @@
 #include "sshell.h"
+
 /**
  * _cd - finds if line input is cd builtin
  * @p: input of user, array of pointers
  * @loop: counter of loop
  * @v: arguments in input
+ * @myenv: copy of environment variables
  * Return: -1 if not success 0 if exist cd in args[0]
  */
-int _cd(char **p, int loop, char *v[])
+int _cd(char **p, int loop, char *v[], char **myenv)
 {
 	char str[] = "cd";
 	int i = 0, cont = 0, valor = -1;
@@ -25,7 +27,7 @@ int _cd(char **p, int loop, char *v[])
 
 	if (cont == 3)
 	{
-		_cd(p, loop, v);
+		_iscd(p, loop, v, myenv);
 		valor = 0;
 	}
 	else if (cont == 2)
@@ -35,9 +37,12 @@ int _cd(char **p, int loop, char *v[])
 	}
 	return (valor);
 }
+
 /**
- * _clean - loop through character
- * */
+ * _clean - clean buffer
+ * @c: pointer to buf
+ * Return: -1 if not success 0 if exist cd in args[0]
+ */
 void _clean(char *c)
 {
 	int i;
@@ -45,9 +50,14 @@ void _clean(char *c)
 	for (i = 0; i < 2048; i++)
 		c[i] = 0;
 }
+
 /**
- * _fullcd - give back full output
- * */
+ * _fullcd - fill buffer
+ * @f: pointer to buf
+ * @aux: pointer to aux
+ * Return: -1 if not success 0 if exist cd in args[0]
+ */
+
 void _fullcd(char *f, char *aux)
 {
 	int w;
@@ -62,9 +72,10 @@ void _fullcd(char *f, char *aux)
  * @a: input of user, array of pointers
  * @loop: loops counter
  * @v: arguments in input
+ * @myenv: copy of environment variables
  * Return:-1 if not find the directory or 0 if success
  */
-void _iscd(char **a, int loop, char *v[])
+void _iscd(char **a, int loop, char *v[], char **myenv)
 {
 	int valor = 0;
 	static char buf[2048];
@@ -73,7 +84,8 @@ void _iscd(char **a, int loop, char *v[])
 
 	if (w == 1)
 	{
-		_fullcd(buf, _gethome());
+		_updateoldpwd(getcwd(buf, 2048), myenv);
+		_fullcd(buf, _gethome(myenv));
 		w++;
 	}
 	if (a[1] == NULL)
@@ -81,27 +93,31 @@ void _iscd(char **a, int loop, char *v[])
 		_clean(buf);
 		getcwd(buf, 2048);
 
-		valor = chdir((const char *)_gethome());
-		if (valor == -1)
-			_put_err(a, loop, 1, v);
+		_updateoldpwd(buf, myenv);
+		valor = chdir((const char *)_gethome(myenv));
+		_updatepwd(_gethome(myenv), myenv);
+
 	}
 	else if (a[1][0] == '-' && a[1][1] == '\0')
 	{
 		_clean(aux);
 		getcwd(aux, 2048);
+
+		_updateoldpwd(aux, myenv);
 		write(STDOUT_FILENO, buf, 2048);
 		write(STDOUT_FILENO, "\n", 1);
 		valor = chdir((const char *)buf);
-		if (valor == -1)
-			_put_err(a, loop, 1, v);
+		_updatepwd(buf, myenv);
 		_fullcd(buf, aux);
 	}
 	else
 	{
 		_clean(buf);
 		getcwd(buf, 2048);
+		_updateoldpwd(buf, myenv);
 		valor = chdir((const char *)a[1]);
-		if (valor == -1)
-			_put_err(a, loop, 1, v);
+		_updatepwd(a[1], myenv);
 	}
+	if (valor == -1)
+		_put_err(a, loop, 1, v);
 }
