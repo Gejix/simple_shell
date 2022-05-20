@@ -116,4 +116,4 @@ void _iscd(char **a, int loop, char *v[], char **myenv)
 	}
 	if (valor == -1)
 		_put_err(a, loop, 1, v);
-} 
+}
