@@ -1,12 +1,10 @@
 #include "sshell.h"
-
 /**
  * Counter - counts the number of lim found in the input
  * @C: the input string;
  * @lim: character to find inside the C string
  * Return: number of characters found
  */
-
 int Counter(char *C, char *lim)
 {
 	int i = 0, num = 0;
@@ -25,13 +23,11 @@ int Counter(char *C, char *lim)
 	}
 	return (num);
 }
-
 /**
  * parsing - create an array of pointers depending of the delimit characters
  * @line: input of the user
  * Return: an array of pointers of n size
  */
-
 char **parsing(char *line)
 {
 	char *token = NULL, **p = NULL;
@@ -44,10 +40,15 @@ char **parsing(char *line)
 	if (!p)
 	{
 		perror("No memory");
-		exit(EXIT_FAILURE);
+		return (NULL);
 	}
 	/*store the token partition inside **p */
-	token = strtok(line, " \n");
+	token = _strtok(line, " \t\n");
+	if (!token)
+	{
+		free(p);
+		return (NULL);
+	}
 	while (token)
 	{
 		while (token[length] != '\0')
@@ -57,7 +58,7 @@ char **parsing(char *line)
 		{
 			gridfree(p, j);
 			perror("No memory");
-			exit(EXIT_FAILURE);
+			return (NULL);
 		}
 		/*fill the pointer with the content of token*/
 		for (i = 0; i < length; i++)
@@ -65,7 +66,7 @@ char **parsing(char *line)
 		length = 0;
 		j++;
 		/*get the next element*/
-		token = strtok(NULL, " \n");
+		token = _strtok(NULL, " \t\n");
 	}
 	p[j] = NULL;
 	return (p);
